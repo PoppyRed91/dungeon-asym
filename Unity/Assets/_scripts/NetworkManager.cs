@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using SocketIOClient;
 using UnityEngine;
 
-public class NetworkManager : MonoBehaviour
+public class NetworkManager
 {
     public static NetworkManager Instance;
     public string _ipAddress;
@@ -20,7 +20,7 @@ public class NetworkManager : MonoBehaviour
     private void Awake()
     {
         if (Instance == null) Instance = this;
-        DontDestroyOnLoad(gameObject);
+
         _uri = new Uri($"http://{_ipAddress}");
         _socket = new SocketIOUnity(_uri, _socketIOOptions);
         _socket.OnConnected += OnConnected;

@@ -21,7 +21,7 @@ public class NetworkManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         DontDestroyOnLoad(gameObject);
-        _uri = new Uri($"https://{_ipAddress}");
+        _uri = new Uri($"http://{_ipAddress}");
         _socket = new SocketIOUnity(_uri, _socketIOOptions);
         _socket.OnConnected += OnConnected;
         _socket.OnDisconnected += OnDisconnected;
@@ -41,11 +41,7 @@ public class NetworkManager : MonoBehaviour
     private void OnConnected(object sender, EventArgs e)
     {
         Debug.Log($"Connected to {sender}");
-    }
-
-    public void SetUri(string uri)
-    {
-
+        _socket.Emit("message", "Hello from Unity!");
     }
 
     public void Connect()

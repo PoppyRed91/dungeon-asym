@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "u_dungeon.sln"
+    "dotnet.defaultSolution": "Unity.sln"
 }

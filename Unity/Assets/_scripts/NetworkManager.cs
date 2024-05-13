@@ -15,8 +15,6 @@ public class NetworkManager : MonoBehaviour
     }
     private SocketIOUnity _socket;
 
-
-
     public async void Connect(string ip, int port, string name)
     {
         _socket = new SocketIOUnity(new Uri($"http://{ip}:{port}"), new SocketIOOptions
@@ -35,6 +33,8 @@ public class NetworkManager : MonoBehaviour
             Debug.Log("Connected to server!");
             await _socket.EmitAsync("userdata", name);
             await _socket.EmitAsync("msg", "Hello from unity!");
+
+            _socket.On("msg", (data) => Debug.Log(data.ToString()));
         };
 
         await _socket.ConnectAsync();
@@ -53,6 +53,4 @@ public class NetworkManager : MonoBehaviour
     {
         if (_socket != null) Disconnect();
     }
-
-
 }

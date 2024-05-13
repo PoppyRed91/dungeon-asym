@@ -52,7 +52,3 @@ export default function App() {
     </section>
   );
 }
-
-// tipka join
-// input 1: ip adresa - duzi
-// input 2: port - kraci

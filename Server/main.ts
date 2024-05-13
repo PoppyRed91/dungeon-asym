@@ -1,26 +1,35 @@
 import { serve } from "https://deno.land/std@0.150.0/http/server.ts";
 import { Server } from "https://deno.land/x/socket_io@0.1.1/mod.ts";
 
-const io = new Server();
+const server = new Server({
+  cors: {
+    origin: "http://192.168.50.3:3000",
+  },
+});
 
-io.on("connection", (socket) => {
+server.on("connection", (client) => {
   let nickname: string;
-  socket.on("userdata", (name) => {
+
+  client.on("userdata", (name) => {
     nickname = name;
     log(`${nickname} connected!`);
+    server.emit("msg", nickname + " just joined!");
+    server.emit("msg", "Welcome " + nickname + "!!");
   });
 
-  socket.on("msg", (data) => {
+  client.on("msg", (data) => {
     log(nickname + ": " + data);
   });
 
-  socket.on("disconnect", (reason) => {
+  client.on("disconnect", (reason) => {
     log(`${nickname} disconnected due to ${reason}`);
+    server.emit("msg", `${nickname} disconnected due to ${reason}`);
   });
 });
 
-await serve(io.handler(), {
-  hostname: "0.0.0.0",
+console.clear();
+await serve(server.handler(), {
+  hostname: "192.168.50.3",
   port: 3000,
 });
 

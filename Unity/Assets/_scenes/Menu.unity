@@ -1430,7 +1430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ip: {fileID: 1945152786}
   port: {fileID: 132782695}
-  nickname: {fileID: 0}
+  nickname: {fileID: 466699234}
 --- !u!1 &1515572996
 GameObject:
   m_ObjectHideFlags: 0

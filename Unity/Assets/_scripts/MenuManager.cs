@@ -1,16 +1,29 @@
+using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] private TMP_InputField ip, port;
+
+    private void OnEnable()
     {
-        
+        NetworkManager.OnConnect += SwitchScene;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-        
+        ip.text = "192.168.50.2";
+        port.text = "3000";
+    }
+
+    private void SwitchScene()
+    {
+        SceneManager.LoadSceneAsync("Dungeon");
+    }
+
+    public void Join()
+    {
+        NetworkManager.Instance.Connect(ip.text, int.Parse(port.text), "Deno");
     }
 }

@@ -28,7 +28,7 @@ public class Player : MonoBehaviour
     private void OnMove(InputValue input)
     {
         if (_isMoving) return;
-        int direction = (int)input.Get<float>();
+        var direction = input.Get<float>();
 
         if (direction > 0 && _isHittingFront) return;
         else if (direction < 0 && _isHittingBack) return;

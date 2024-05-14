@@ -10,9 +10,8 @@ public class Player : MonoBehaviour
     public float TurnSpeed;
     [SerializeField] private Camera _camera;
     private bool _isMoving;
-    private bool _isHittingFront;
-    private bool _isHittingBack;
-    private RaycastHit _frontHit, _backHit;
+    private bool _isHittingSolid;
+    private RaycastHit _hit;
 
     private void Awake()
     {
@@ -21,41 +20,50 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        Debug.DrawRay(_camera.transform.position, _camera.transform.forward * 2.5f, Color.red, 0);
-        _isHittingFront = Physics.Raycast(_camera.transform.position, _camera.transform.forward, out _frontHit, 2.1f);
-        _isHittingBack = Physics.Raycast(_camera.transform.position, -_camera.transform.forward, out _backHit, 2.1f);
+        Debug.DrawRay(_camera.transform.position, _camera.transform.forward, Color.red, 0);
+        Debug.DrawRay(_camera.transform.position, -_camera.transform.forward, Color.red, 0);
     }
     private void OnMove(InputValue input)
     {
-        if (_isMoving) return;
+        Debug.Log("Pressed Move");
         var direction = input.Get<float>();
-
-        if (direction > 0 && _isHittingFront) return;
-        else if (direction < 0 && _isHittingBack) return;
+        Debug.Log("Direction: " + direction);
+        if (_isMoving || CheckCollision(direction)) return;
         var sequence = DOTween.Sequence();
         sequence.AppendCallback(() => _isMoving = true);
-        sequence.Append(transform.DOLocalMove(transform.position + (direction * _camera.transform.forward) * 2, MovementSpeed));
+        sequence.Append(transform.DOMove(transform.position + 2 * direction * _camera.transform.forward, MovementSpeed));
         sequence.AppendCallback(() => _isMoving = false);
     }
 
     private void OnTurn(InputValue input)
     {
-        if (_isMoving) return;
+        Debug.Log("Pressed Turn");
         int direction = (int)input.Get<float>();
+        if (_isMoving || direction == 0) return;
         var sequence = DOTween.Sequence();
         sequence.AppendCallback(() => _isMoving = true);
-        sequence.Append(transform.DOLocalRotate(transform.eulerAngles + (direction * new Vector3(0, 90, 0)), TurnSpeed));
+        sequence.Append(transform.DORotate(transform.eulerAngles + (direction * new Vector3(0, 90, 0)), TurnSpeed));
         sequence.AppendCallback(() => _isMoving = false);
     }
 
     private void OnInteract()
     {
-        if (_isHittingFront)
-            if (_frontHit.transform.GetComponent<IInteractable>() != null)
+        if (CheckCollision(1))
+            if (_hit.transform.GetComponent<IInteractable>() != null)
             {
-                _frontHit.transform.GetComponent<IInteractable>().OnInteract();
+                _hit.transform.GetComponent<IInteractable>().OnInteract();
                 StartCoroutine(MoveThroughDoor());
             }
+    }
+
+    private bool CheckCollision(float direction)
+    {
+        if (Physics.Raycast(_camera.transform.position, direction * _camera.transform.forward, out _hit, 2f))
+        {
+            Debug.Log("Collision with " + _hit.transform.name);
+            return true;
+        }
+        else return false;
 
     }
 
@@ -63,7 +71,7 @@ public class Player : MonoBehaviour
     {
         _isMoving = true;
         yield return new WaitForSeconds(1);
-        yield return transform.DOLocalMove(transform.position + _camera.transform.forward * 4, MovementSpeed * 2).WaitForCompletion(true);
+        yield return transform.DOMove(transform.position + _camera.transform.forward * 4, MovementSpeed * 2).WaitForCompletion(true);
         yield return new WaitForSeconds(1);
         _isMoving = false;
     }

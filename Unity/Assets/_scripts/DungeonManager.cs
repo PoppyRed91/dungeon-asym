@@ -36,11 +36,12 @@ public class DungeonManager : MonoBehaviour
                             door += connector.gameObject.name + "_LK-";
                     }
                 }
-                stringToSend += $"{module.name}#X{Math.Floor(module.position.x / 7)}.Y{Math.Floor(module.position.z / 7)}.R{Math.Round(module.eulerAngles.y)}/{door}|";
+                stringToSend += $"{module.name}#{Math.Floor(module.position.x / 7)}#{Math.Floor(module.position.z / 7)}#{Math.Round(module.eulerAngles.y)}#{door}|";
             }
             stringToSend = stringToSend.Replace("(Clone)", "");
             stringToSend = stringToSend.Replace("Room-", "");
             Debug.Log(stringToSend);
+            //NetworkManager.Instance.Socket.Emit("map", stringToSend);
         }
     }
 }
@@ -92,3 +93,5 @@ public class DungeonManager : MonoBehaviour
 /// ExitX9.Y8.R180/|
 /// Default#X10.Y5.R270/Door_N|
 /// Plyer#X8.Y2.R90/|
+
+///

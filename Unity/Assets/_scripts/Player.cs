@@ -111,6 +111,7 @@ public class Player : MonoBehaviour
         //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
         _isMoving = false;
+        //NET_UpdatePosition();
     }
     IEnumerator TurnPlayer(Vector3 rotation)
     {
@@ -129,7 +130,12 @@ public class Player : MonoBehaviour
         transform.eulerAngles = _targetPosition;
         //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
-        _isRotating = false;
+        //NET_UpdatePosition();
+    }
+
+    public void NET_UpdatePosition()
+    {
+        NetworkManager.Instance.Socket.Emit("playerLocation", $"X{Math.Floor(transform.position.x)}.Y{Math.Floor(transform.position.z)}.R{Math.Round(transform.eulerAngles.y)}");
     }
 
 }

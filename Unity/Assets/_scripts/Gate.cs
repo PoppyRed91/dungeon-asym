@@ -7,7 +7,7 @@ public class Gate : MonoBehaviour, IInteractable
     [SerializeField] private GameObject _upperDoor, _lowerDoor;
 
 
-    public void OnInteract()
+    public void OnInteract(Player player)
     {
         _upperDoor.transform.DOLocalMoveY(1.6f, 1);
         _lowerDoor.transform.DOLocalMoveY(-1.6f, 1);

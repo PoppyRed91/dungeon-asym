@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2059265692631292075}
   - component: {fileID: 8337073775892245643}
-  - component: {fileID: 3334461879129762590}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -46,39 +45,43 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b8775b05bc7a54182cf418dc10c1a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MovementSpeed: 0.5
-  TurnSpeed: 0.5
-  _camera: {fileID: 1991510204766238407}
---- !u!114 &3334461879129762590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2895257512538650728}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 62791aa2f0951ee43a5e4a7aac330f8c, type: 3}
-  m_NotificationBehavior: 0
-  m_UIInputModule: {fileID: 0}
-  m_DeviceLostEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_DeviceRegainedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ControlsChangedEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  m_ActionEvents: []
-  m_NeverAutoSwitchControlSchemes: 0
-  m_DefaultControlScheme: 
-  m_DefaultActionMap: Player
-  m_SplitScreenIndex: -1
-  m_Camera: {fileID: 0}
+  _settings:
+    MovementSpeed: 0.3
+    TurningSpeed: 0.3
+  _references:
+    Camera: {fileID: 1991510204766238407}
+    Footsteps:
+    - {fileID: 8300000, guid: be9ebb9463981c9498dc323f28aa153a, type: 3}
+    - {fileID: 8300000, guid: 617a23a6a5ab63b40b9060d3fe108ca2, type: 3}
+    - {fileID: 8300000, guid: 516f26230ac93f34589f9fda1305ef5d, type: 3}
+    - {fileID: 8300000, guid: 54b67553f7fd75749a18cb17d00fd281, type: 3}
+    - {fileID: 8300000, guid: 06e0f14773ed69e4ebc42f8ac4020e24, type: 3}
+    - {fileID: 8300000, guid: 9df9c5ee5f0835f43837a9531afceacf, type: 3}
+    - {fileID: 8300000, guid: 8ff076e45ea070048a186b3677c4fd87, type: 3}
+    - {fileID: 8300000, guid: abacf192506503c4495c77a0a1d3ea97, type: 3}
+    - {fileID: 8300000, guid: d3acf5f51356f964cb4c07207b3893f9, type: 3}
+    - {fileID: 8300000, guid: a1388a23d38c4f3408f60565e6c067e1, type: 3}
+    - {fileID: 8300000, guid: ec9ba1ce000248f46aa41bed67aa5210, type: 3}
+    - {fileID: 8300000, guid: c1392af2ec61c0845806b87cd8ca5b20, type: 3}
+    - {fileID: 8300000, guid: c865ae3cf04eb7345a942ac79484cfec, type: 3}
+    - {fileID: 8300000, guid: f1cbe4b282a141b48b5f27f8283259e1, type: 3}
+    - {fileID: 8300000, guid: 5163b2fffbdf89a4e87a3218529ea150, type: 3}
+    - {fileID: 8300000, guid: fcdc74399c0e4a94a9684749060cc95a, type: 3}
+    - {fileID: 8300000, guid: f6dc8a8dba34a934b8374267d0dceeab, type: 3}
+    - {fileID: 8300000, guid: 1952efe1ab7474a4884d1553c24b529c, type: 3}
+    - {fileID: 8300000, guid: 8e07d756f4f18c4479dab39bcad9f062, type: 3}
+    - {fileID: 8300000, guid: 9088283b9840d8043ab6bcd89ecf9a10, type: 3}
+  _input:
+    Forward: 119
+    Backward: 115
+    TurnLeft: 97
+    TurnRight: 100
+    StepLeft: 113
+    StepRight: 101
+    TurnAround: 115
+    Interact: 32
+    Sprint: 304
+  HasInput: 1
 --- !u!1 &7890711602180016126
 GameObject:
   m_ObjectHideFlags: 0

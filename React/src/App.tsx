@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { io } from "socket.io-client";
 import "./App.css";
+import MapGrid from "./components/MapGrid";
 
 export default function App() {
   const socket = io("ws://192.168.50.3:3000", {
@@ -43,12 +44,9 @@ export default function App() {
   return (
     <section>
       <p>Navigate through dungeon</p>
-      <button onClick={() => connect()}>
-        <p>Join</p>
-      </button>
-      <button onClick={() => disconnect()}>
-        <p>Disconnect</p>
-      </button>
+      <button onClick={() => connect()}>Join</button>
+      <button onClick={() => disconnect()}>Disconnect</button>
+      <MapGrid></MapGrid>
     </section>
   );
 }

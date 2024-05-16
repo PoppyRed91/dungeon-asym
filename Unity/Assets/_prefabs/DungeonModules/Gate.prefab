@@ -50,6 +50,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _upperDoor: {fileID: 6601844807409379555}
   _lowerDoor: {fileID: 5299860780998493751}
+  IsOneWay: 0
+  CanOpen: 1
 --- !u!65 &7002538735154853614
 BoxCollider:
   m_ObjectHideFlags: 0

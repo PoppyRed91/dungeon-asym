@@ -52,12 +52,29 @@ public class Player : MonoBehaviour
         Debug.DrawRay(_references.Camera.transform.position, _references.Camera.transform.forward, Color.red, 0);
         Debug.DrawRay(_references.Camera.transform.position, -_references.Camera.transform.forward, Color.red, 0);
         HandleInput();
+        HandleDebugInput();
     }
 
     private void Interact()
     {
         if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.forward, out RaycastHit hit, 2))
             hit.transform.GetComponent<IInteractable>()?.OnInteract(this);
+    }
+
+    private void HandleDebugInput()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            NET_UpdatePosition();
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            NetworkManager.Instance.Socket.EmitAsync("map", DungeonManager.Instance.DungeonCode);
+        }
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            NetworkManager.Instance.Socket.EmitAsync("compass", "Nothing to see here");
+        }
     }
 
     private void HandleInput()
@@ -111,7 +128,6 @@ public class Player : MonoBehaviour
         //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
         _isMoving = false;
-        NET_UpdatePosition();
     }
     IEnumerator TurnPlayer(Vector3 rotation)
     {
@@ -132,6 +148,14 @@ public class Player : MonoBehaviour
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
         _isRotating = false;
         NET_UpdatePosition();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("RoomIdentifier"))
+        {
+            NET_UpdatePosition();
+        }
     }
 
     public async void NET_UpdatePosition()

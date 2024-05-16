@@ -1,22 +1,40 @@
 using System;
+using System.Collections;
 using DungeonArchitect;
 using DungeonArchitect.Frameworks.Snap;
 using UnityEngine;
 
 public class DungeonManager : MonoBehaviour
 {
+    public static DungeonManager Instance;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
     public Dungeon Dungeon;
+    public string DungeonCode;
 
     private void Start()
     {
+        GenerateDungeon();
+    }
+
+    public void GenerateDungeon()
+    {
         if (Dungeon != null)
         {
-
             Dungeon.Config.Seed = (uint)(UnityEngine.Random.value * int.MaxValue);
             Dungeon.Build();
             Debug.Log(Dungeon.GetComponent<PooledDungeonSceneProvider>().itemParent.transform.childCount);
             var modules = Dungeon.GetComponent<PooledDungeonSceneProvider>().itemParent.transform;
-            string stringToSend = "";
             foreach (Transform module in modules)
             {
                 string door = "";
@@ -36,12 +54,10 @@ public class DungeonManager : MonoBehaviour
                             door += connector.gameObject.name + "_LK-";
                     }
                 }
-                stringToSend += $"{module.name}#{Math.Floor(module.position.x / 7)}#{Math.Floor(module.position.z / 7)}#{Math.Round(module.eulerAngles.y)}#{door}|";
+                DungeonCode += $"{module.name}#{Math.Floor(module.position.x / 7)}#{Math.Floor(module.position.z / 7)}#{Math.Round(module.eulerAngles.y)}#{door}|";
             }
-            stringToSend = stringToSend.Replace("(Clone)", "");
-            stringToSend = stringToSend.Replace("Room-", "");
-            Debug.Log(stringToSend);
-            NetworkManager.Instance.Socket.Emit("map", stringToSend);
+            DungeonCode = DungeonCode.Replace("(Clone)", "");
+            DungeonCode = DungeonCode.Replace("Room-", "");
         }
     }
 }

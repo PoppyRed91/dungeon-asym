@@ -41,7 +41,7 @@ public class DungeonManager : MonoBehaviour
             stringToSend = stringToSend.Replace("(Clone)", "");
             stringToSend = stringToSend.Replace("Room-", "");
             Debug.Log(stringToSend);
-            //NetworkManager.Instance.Socket.Emit("map", stringToSend);
+            NetworkManager.Instance.Socket.Emit("map", stringToSend);
         }
     }
 }

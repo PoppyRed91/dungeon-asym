@@ -56,33 +56,34 @@ public class Player : MonoBehaviour
 
     private void Interact()
     {
-        Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.forward, out RaycastHit hit, 2);
-        hit.transform.GetComponent<IInteractable>()?.OnInteract(this);
+        if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.forward, out RaycastHit hit, 2))
+            hit.transform.GetComponent<IInteractable>()?.OnInteract(this);
     }
 
     private void HandleInput()
     {
         if (!HasInput) return;
+        if (Input.GetKeyDown(_input.Interact)) Interact();
         if (_isMoving || _isRotating) return;
         if (Input.GetKey(_input.Forward))
         {
-            if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.forward, 1)) return;
+            if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.forward, 1.5f)) return;
             StartCoroutine(MovePlayer(_references.Camera.transform.forward));
 
         }
         if (Input.GetKey(_input.Backward))
         {
-            if (Physics.Raycast(_references.Camera.transform.position, -_references.Camera.transform.forward, 1)) return;
+            if (Physics.Raycast(_references.Camera.transform.position, -_references.Camera.transform.forward, 1.5f)) return;
             StartCoroutine(MovePlayer(-_references.Camera.transform.forward));
         }
         if (Input.GetKey(_input.StepLeft))
         {
-            if (Physics.Raycast(_references.Camera.transform.position, -_references.Camera.transform.right, 1)) return;
+            if (Physics.Raycast(_references.Camera.transform.position, -_references.Camera.transform.right, 1.5f)) return;
             StartCoroutine(MovePlayer(-_references.Camera.transform.right));
         }
         if (Input.GetKey(_input.StepRight))
         {
-            if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.right, 1)) return;
+            if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.right, 1.5f)) return;
             StartCoroutine(MovePlayer(_references.Camera.transform.right));
         }
 
@@ -90,7 +91,6 @@ public class Player : MonoBehaviour
         if (Input.GetKey(_input.TurnLeft)) StartCoroutine(TurnPlayer(new Vector3(0, -90, 0)));
         if (Input.GetKey(_input.TurnRight)) StartCoroutine(TurnPlayer(new Vector3(0, 90, 0)));
         if (Input.GetKey(_input.TurnAround)) StartCoroutine(TurnPlayer(new Vector3(0, 180, 0)));
-        if (Input.GetKeyDown(_input.Interact)) Interact();
     }
 
 
@@ -111,7 +111,7 @@ public class Player : MonoBehaviour
         //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
         _isMoving = false;
-        //NET_UpdatePosition();
+        NET_UpdatePosition();
     }
     IEnumerator TurnPlayer(Vector3 rotation)
     {
@@ -130,12 +130,13 @@ public class Player : MonoBehaviour
         transform.eulerAngles = _targetPosition;
         //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
-        //NET_UpdatePosition();
+        _isRotating = false;
+        NET_UpdatePosition();
     }
 
-    public void NET_UpdatePosition()
+    public async void NET_UpdatePosition()
     {
-        NetworkManager.Instance.Socket.Emit("playerLocation", $"X{Math.Floor(transform.position.x)}.Y{Math.Floor(transform.position.z)}.R{Math.Round(transform.eulerAngles.y)}");
+        await NetworkManager.Instance.Socket.EmitAsync("player", $"X{Math.Floor(transform.position.x)}.Y{Math.Floor(transform.position.z)}.R{Math.Round(transform.eulerAngles.y)}");
     }
 
 }

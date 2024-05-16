@@ -1,84 +1,166 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Editor;
+
+[Serializable]
+public class PlayerSettings
+{
+    public float MovementSpeed;
+    public float TurningSpeed;
+}
+
+[Serializable]
+public class PlayerInput
+{
+    public KeyCode Forward;
+    public KeyCode Backward;
+    public KeyCode TurnLeft;
+    public KeyCode TurnRight;
+    public KeyCode StepLeft;
+    public KeyCode StepRight;
+    public KeyCode TurnAround;
+    public KeyCode Interact;
+    public KeyCode Sprint;
+}
+
+[Serializable]
+public class PlayerReferences
+{
+    public Camera Camera;
+    public List<AudioClip> Footsteps;
+}
 
 public class Player : MonoBehaviour
 {
-    public float MovementSpeed;
-    public float TurnSpeed;
-    [SerializeField] private Camera _camera;
-    private bool _isMoving;
-    private bool _isHittingFront;
-    private bool _isHittingBack;
-    private RaycastHit _frontHit, _backHit;
+    [SerializeField] private PlayerSettings _settings;
+    [SerializeField] private PlayerReferences _references;
+    [SerializeField] private PlayerInput _input;
 
-    private void Awake()
-    {
-        _camera = GetComponentInChildren<Camera>();
-    }
+    public Keyboard keyboard;
+
+    private bool _isMoving;
+    private bool _isRotating;
+    public bool HasInput;
+    private Vector3 _originalPosition, _targetPosition;
 
     private void Update()
     {
-        Debug.DrawRay(_camera.transform.position, _camera.transform.forward * 2.5f, Color.red, 0);
-        _isHittingFront = Physics.Raycast(_camera.transform.position, _camera.transform.forward, out _frontHit, 2.1f);
-        _isHittingBack = Physics.Raycast(_camera.transform.position, -_camera.transform.forward, out _backHit, 2.1f);
+        Debug.DrawRay(_references.Camera.transform.position, _references.Camera.transform.forward, Color.red, 0);
+        Debug.DrawRay(_references.Camera.transform.position, -_references.Camera.transform.forward, Color.red, 0);
+        HandleInput();
+        HandleDebugInput();
     }
-    private void OnMove(InputValue input)
+
+    private void Interact()
     {
+        if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.forward, out RaycastHit hit, 2))
+            hit.transform.GetComponent<IInteractable>()?.OnInteract(this);
+    }
+
+    private void HandleDebugInput()
+    {
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            NET_UpdatePosition();
+        }
+        if (Input.GetKeyDown(KeyCode.F2))
+        {
+            NetworkManager.Instance.Socket.EmitAsync("map", DungeonManager.Instance.DungeonCode);
+        }
+        if (Input.GetKeyDown(KeyCode.F1))
+        {
+            NetworkManager.Instance.Socket.EmitAsync("compass", "Nothing to see here");
+        }
+    }
+
+    private void HandleInput()
+    {
+        if (!HasInput) return;
+        if (Input.GetKeyDown(_input.Interact)) Interact();
+        if (_isMoving || _isRotating) return;
+        if (Input.GetKey(_input.Forward))
+        {
+            if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.forward, 1.5f)) return;
+            StartCoroutine(MovePlayer(_references.Camera.transform.forward));
+
+        }
+        if (Input.GetKey(_input.Backward))
+        {
+            if (Physics.Raycast(_references.Camera.transform.position, -_references.Camera.transform.forward, 1.5f)) return;
+            StartCoroutine(MovePlayer(-_references.Camera.transform.forward));
+        }
+        if (Input.GetKey(_input.StepLeft))
+        {
+            if (Physics.Raycast(_references.Camera.transform.position, -_references.Camera.transform.right, 1.5f)) return;
+            StartCoroutine(MovePlayer(-_references.Camera.transform.right));
+        }
+        if (Input.GetKey(_input.StepRight))
+        {
+            if (Physics.Raycast(_references.Camera.transform.position, _references.Camera.transform.right, 1.5f)) return;
+            StartCoroutine(MovePlayer(_references.Camera.transform.right));
+        }
+
         if (_isMoving) return;
-        int direction = (int)input.Get<float>();
-
-        if (direction > 0 && _isHittingFront) return;
-        else if (direction < 0 && _isHittingBack) return;
-        var sequence = DOTween.Sequence();
-        sequence.AppendCallback(() => _isMoving = true);
-        sequence.Append(transform.DOLocalMove(transform.position + (direction * _camera.transform.forward) * 2, MovementSpeed));
-        sequence.AppendCallback(() => _isMoving = false);
+        if (Input.GetKey(_input.TurnLeft)) StartCoroutine(TurnPlayer(new Vector3(0, -90, 0)));
+        if (Input.GetKey(_input.TurnRight)) StartCoroutine(TurnPlayer(new Vector3(0, 90, 0)));
+        if (Input.GetKey(_input.TurnAround)) StartCoroutine(TurnPlayer(new Vector3(0, 180, 0)));
     }
 
-    private void OnTurn(InputValue input)
-    {
-        if (_isMoving) return;
-        int direction = (int)input.Get<float>();
-        var sequence = DOTween.Sequence();
-        sequence.AppendCallback(() => _isMoving = true);
-        sequence.Append(transform.DOLocalRotate(transform.eulerAngles + (direction * new Vector3(0, 90, 0)), TurnSpeed));
-        sequence.AppendCallback(() => _isMoving = false);
-    }
 
-    private void OnInteract()
-    {
-        if (_isHittingFront)
-            if (_frontHit.transform.GetComponent<IInteractable>() != null)
-            {
-                _frontHit.transform.GetComponent<IInteractable>().OnInteract();
-                StartCoroutine(MoveThroughDoor());
-            }
-
-    }
-
-    IEnumerator MoveThroughDoor()
+    IEnumerator MovePlayer(Vector3 direction)
     {
         _isMoving = true;
-        yield return new WaitForSeconds(1);
-        yield return transform.DOLocalMove(transform.position + _camera.transform.forward * 4, MovementSpeed * 2).WaitForCompletion(true);
-        yield return new WaitForSeconds(1);
+        float elapsedTime = 0;
+        _originalPosition = transform.position;
+        _targetPosition = _originalPosition + direction;
+        _references.Camera.transform.DOLocalJump(Vector3.up, 0.05f, 1, _settings.MovementSpeed);
+        while (elapsedTime < _settings.MovementSpeed)
+        {
+            transform.position = Vector3.Lerp(_originalPosition, _targetPosition, elapsedTime / _settings.MovementSpeed);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = _targetPosition;
+        //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
+        AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
         _isMoving = false;
     }
-
-    private void OnDrawGizmosSelected()
+    IEnumerator TurnPlayer(Vector3 rotation)
     {
-        Vector3 spherePosition = _camera.transform.position + _camera.transform.forward * 2.1f;
+        _isRotating = true;
+        float elapsedTime = 0;
+        _originalPosition = transform.eulerAngles;
+        _targetPosition = _originalPosition + rotation;
+        _references.Camera.transform.DOLocalJump(Vector3.up, 0.05f, 1, _settings.TurningSpeed);
+        while (elapsedTime < _settings.TurningSpeed)
+        {
+            transform.eulerAngles = Vector3.Lerp(_originalPosition, _targetPosition, elapsedTime / _settings.TurningSpeed);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
 
-        Gizmos.color = new Color(0, 1, 0, 0.5f);
-        Gizmos.DrawCube(transform.position + Vector3.up, Vector3.one * 1.8f);
-        Gizmos.color = new Color(1, 0, 0, 0.5f);
-        Gizmos.DrawRay(_camera.transform.position, _camera.transform.forward * 2.1f);
-        Gizmos.color = new Color(1, 0, 0, 0.5f);
-        Gizmos.DrawSphere(spherePosition, 0.25f);
+        transform.eulerAngles = _targetPosition;
+        //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
+        AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
+        _isRotating = false;
+        NET_UpdatePosition();
+    }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("RoomIdentifier"))
+        {
+            NET_UpdatePosition();
+        }
+    }
+
+    public async void NET_UpdatePosition()
+    {
+        await NetworkManager.Instance.Socket.EmitAsync("player", $"X{Math.Floor(transform.position.x)}.Y{Math.Floor(transform.position.z)}.R{Math.Round(transform.eulerAngles.y)}");
     }
 
 }

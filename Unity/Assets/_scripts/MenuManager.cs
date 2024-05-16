@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
-    [SerializeField] private TMP_InputField ip, port;
+    [SerializeField] private TMP_InputField ip, port, nickname;
 
     private void OnEnable()
     {
@@ -13,8 +13,9 @@ public class MenuManager : MonoBehaviour
 
     private void Start()
     {
-        ip.text = "192.168.50.2";
+        ip.text = "192.168.50.3";
         port.text = "3000";
+        nickname.text = "Dino";
     }
 
     private void SwitchScene()
@@ -24,6 +25,6 @@ public class MenuManager : MonoBehaviour
 
     public void Join()
     {
-        NetworkManager.Instance.Connect(ip.text, int.Parse(port.text), "Deno");
+        NetworkManager.Instance.Connect(ip.text, int.Parse(port.text), nickname.text);
     }
 }

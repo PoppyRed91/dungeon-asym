@@ -21,14 +21,30 @@ server.on("connection", (client) => {
     log(nickname + ": " + data);
   });
 
-  client.on("disconnect", (reason) => {
+  socket.on("map", (data) => {
+    RelayMessage("map", data);
+  });
+
+  socket.on("player", (data) => {
+    RelayMessage("player", data);
+  });
+
+  socket.on("compass", (data) => {
+    RelayMessage("compass", data);
+  });
+
+  socket.on("disconnect", (reason) => {
     log(`${nickname} disconnected due to ${reason}`);
     server.emit("msg", `${nickname} disconnected due to ${reason}`);
   });
+
+  function RelayMessage(message: string, data: string) {
+    io.emit(message, data);
+    log("Relaying message: " + message);
+  }
 });
 
-console.clear();
-await serve(server.handler(), {
+await serve(io.handler(), {
   hostname: "192.168.50.3",
   port: 3000,
 });

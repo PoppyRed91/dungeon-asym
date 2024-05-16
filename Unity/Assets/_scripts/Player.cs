@@ -71,7 +71,7 @@ public class Player : MonoBehaviour
         {
             NetworkManager.Instance.Socket.EmitAsync("map", DungeonManager.Instance.DungeonCode);
         }
-        if (Input.GetKeyDown(KeyCode.F1))
+        if (Input.GetKeyDown(KeyCode.F3))
         {
             NetworkManager.Instance.Socket.EmitAsync("compass", "Nothing to see here");
         }

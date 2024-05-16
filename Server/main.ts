@@ -15,20 +15,25 @@ io.on("connection", (socket) => {
   });
 
   socket.on("map", (data) => {
-    io.emit("map", data);
+    RelayMessage("map", data);
   });
 
   socket.on("player", (data) => {
-    io.emit("player", data);
+    RelayMessage("player", data);
   });
 
-  socket.on("compas", (data) => {
-    io.emit("compas", data);
+  socket.on("compass", (data) => {
+    RelayMessage("compass", data);
   });
 
   socket.on("disconnect", (reason) => {
     log(`${nickname} disconnected due to ${reason}`);
   });
+
+  function RelayMessage(message: string, data: string) {
+    io.emit(message, data);
+    log("Relaying message: " + message);
+  }
 });
 
 await serve(io.handler(), {

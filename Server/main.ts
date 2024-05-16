@@ -14,13 +14,25 @@ io.on("connection", (socket) => {
     log(nickname + ": " + data);
   });
 
+  socket.on("map", (data) => {
+    io.emit("map", data);
+  });
+
+  socket.on("player", (data) => {
+    io.emit("player", data);
+  });
+
+  socket.on("compas", (data) => {
+    io.emit("compas", data);
+  });
+
   socket.on("disconnect", (reason) => {
     log(`${nickname} disconnected due to ${reason}`);
   });
 });
 
 await serve(io.handler(), {
-  hostname: "0.0.0.0",
+  hostname: "192.168.50.3",
   port: 3000,
 });
 

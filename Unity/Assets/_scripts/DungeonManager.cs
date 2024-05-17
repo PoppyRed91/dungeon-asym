@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using DungeonArchitect;
 using DungeonArchitect.Frameworks.Snap;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class DungeonManager : MonoBehaviour
@@ -31,6 +32,8 @@ public class DungeonManager : MonoBehaviour
     {
         if (Dungeon != null)
         {
+            DungeonCode = String.Empty;
+            if (Dungeon.IsLayoutBuilt) Dungeon.DestroyDungeon();
             Dungeon.Config.Seed = (uint)(UnityEngine.Random.value * int.MaxValue);
             Dungeon.Build();
             Debug.Log(Dungeon.GetComponent<PooledDungeonSceneProvider>().itemParent.transform.childCount);

@@ -27,4 +27,9 @@ public class MenuManager : MonoBehaviour
     {
         NetworkManager.Instance.Connect(ip.text, int.Parse(port.text), nickname.text);
     }
+
+    public void Solo()
+    {
+        SceneManager.LoadScene("Dungeon");
+    }
 }

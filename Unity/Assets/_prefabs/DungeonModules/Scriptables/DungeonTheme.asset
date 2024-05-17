@@ -44,7 +44,7 @@ MonoBehaviour:
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 5
+  zIndex: 18
   inputPins: []
   outputPins:
   - {fileID: 3838906602394946524}
@@ -66,14 +66,14 @@ MonoBehaviour:
   bounds:
     serializedVersion: 2
     x: 83.5
-    y: 159
+    y: 201
     width: 120
     height: 120
   canBeDeleted: 1
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 6
+  zIndex: 40
   inputPins:
   - {fileID: -387689195882046509}
   outputPins:
@@ -96,7 +96,7 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  consumeOnAttach: 1
+  consumeOnAttach: 0
   attachmentProbability: 1
   IsStatic: 0
   affectsNavigation: 1
@@ -124,14 +124,14 @@ MonoBehaviour:
   bounds:
     serializedVersion: 2
     x: 283
-    y: 67
+    y: 66
     width: 120
     height: 50
   canBeDeleted: 1
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 10
+  zIndex: 28
   inputPins: []
   outputPins:
   - {fileID: 3241595643837414777}
@@ -190,9 +190,9 @@ MonoBehaviour:
   m_Name: DungeonTheme
   m_EditorClassIdentifier: 
   indexCounter:
-    index: 1
+    index: 3
   topZIndex:
-    index: 10
+    index: 43
   nodes:
   - {fileID: -8648277083601609555}
   - {fileID: -5889304015838968828}

@@ -104,7 +104,7 @@ MonoBehaviour:
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 154
+  zIndex: 162
   inputPins:
   - {fileID: 8980176894958145933}
   outputPins:
@@ -240,14 +240,14 @@ MonoBehaviour:
   bounds:
     serializedVersion: 2
     x: -465.77502
-    y: -1.5683441
+    y: -2.568344
     width: 109.76
     height: 46.53
   canBeDeleted: 1
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 155
+  zIndex: 169
   inputPins:
   - {fileID: -5097358338632926505}
   outputPins:
@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   description: 
-  resolution: {x: 16, y: 1, z: 16}
+  resolution: {x: 16, y: 2, z: 16}
 --- !u!114 &-4850565093409365677
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -367,14 +367,14 @@ MonoBehaviour:
   bounds:
     serializedVersion: 2
     x: -263.77502
-    y: 1.4316559
+    y: 2.431656
     width: 147.19
     height: 46.53
   canBeDeleted: 1
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 144
+  zIndex: 168
   inputPins:
   - {fileID: -8820119012915973014}
   outputPins:
@@ -482,15 +482,15 @@ MonoBehaviour:
   caption: 
   bounds:
     serializedVersion: 2
-    x: -44.52002
-    y: 1.2103271
+    x: -70.52002
+    y: 0.21032715
     width: 111.8
     height: 46.53
   canBeDeleted: 1
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 139
+  zIndex: 161
   inputPins:
   - {fileID: -5661772121701622559}
   outputPins:
@@ -525,7 +525,7 @@ MonoBehaviour:
   indexCounter:
     index: 17
   topZIndex:
-    index: 155
+    index: 169
   nodes:
   - {fileID: 1581473064959930146}
   - {fileID: -5616618047526137564}
@@ -590,13 +590,67 @@ MonoBehaviour:
   canBeSelected: 1
   canBeMoved: 1
   selected: 1
-  zIndex: 151
+  zIndex: 164
   inputPins:
   - {fileID: 1286942322769455149}
   outputPins:
   - {fileID: 5699532413335609562}
   graph: {fileID: 481416078950307827}
   task: {fileID: -4850565093409365677}
+--- !u!114 &2498825122635118100
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9953a0139a9d4088bbfc8cae9e781926, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  description: 
+  paths:
+  - main
+  itemType: 2
+  markerName: 
+  customItemInfo:
+    itemType: custom
+    text: 
+    textColor: {r: 1, g: 1, b: 1, a: 1}
+    backgroundColor: {r: 0, g: 0, b: 0, a: 1}
+  minCount: 1
+  maxCount: 4
+  spawnMethod: 1
+  spawnDistributionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spawnDistributionVariance: 0.2
+  minSpawnDifficulty: 0
+  spawnProbability: 1
+  showDifficulty: 0
+  difficultyInfoColor: {r: 0, g: 0, b: 0.5, a: 1}
 --- !u!114 &2547490305405636429
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -869,7 +923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   description: 
-  pathSize: 10
+  pathSize: 30
   pathName: main
   nodeColor: {r: 0, g: 1, b: 0, a: 1}
   startMarkerName: SpawnPoint

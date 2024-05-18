@@ -130,7 +130,6 @@ public class Player : MonoBehaviour
             yield return null;
         }
         transform.position = _targetPosition;
-        //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
         _isMoving = false;
     }
@@ -149,7 +148,6 @@ public class Player : MonoBehaviour
         }
 
         transform.eulerAngles = _targetPosition;
-        //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
         _isRotating = false;
         NET_UpdatePosition();
@@ -178,6 +176,7 @@ public class Player : MonoBehaviour
 
     public async void NET_UpdatePosition()
     {
+        if (GameManager.IsSolo) return;
         await NetworkManager.Instance.Socket.EmitAsync("player", $"X{Math.Floor(transform.position.x)}.Y{Math.Floor(transform.position.z)}.R{Math.Round(transform.eulerAngles.y)}");
     }
 

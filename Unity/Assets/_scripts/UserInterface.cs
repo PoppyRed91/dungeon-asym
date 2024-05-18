@@ -16,9 +16,9 @@ public class UserInterface : MonoBehaviour
     {
         if (fadeIn)
         {
-            _fader.DOFade(0, 2);
+            _fader.DOFade(0, 1);
         }
-        else _fader.DOFade(1, 2);
+        else _fader.DOFade(1, 1);
 
     }
 }

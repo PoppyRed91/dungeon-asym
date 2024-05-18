@@ -30,6 +30,7 @@ public class MenuManager : MonoBehaviour
 
     public void Solo()
     {
+        GameManager.IsSolo = true;
         SceneManager.LoadScene("Dungeon");
     }
 }

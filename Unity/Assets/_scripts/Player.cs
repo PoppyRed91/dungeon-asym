@@ -2,10 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using DungeonArchitect;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Editor;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public class PlayerSettings
@@ -42,7 +41,6 @@ public class Player : MonoBehaviour
     [SerializeField] private PlayerInput _input;
 
     public Keyboard keyboard;
-
     private bool _isMoving;
     private bool _isRotating;
     public bool HasInput = false;
@@ -154,7 +152,7 @@ public class Player : MonoBehaviour
         //_audioSource.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Count)]);
         AudioSource.PlayClipAtPoint(_references.Footsteps[UnityEngine.Random.Range(0, _references.Footsteps.Count)], transform.position);
         _isRotating = false;
-        //NET_UpdatePosition();
+        NET_UpdatePosition();
     }
 
     public void SwitchLevel()
@@ -167,14 +165,14 @@ public class Player : MonoBehaviour
         HasInput = false;
         UserInterface.Instance.Fade(false);
         yield return new WaitForSeconds(2);
-        DungeonManager.Instance.GenerateDungeon();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("RoomIdentifier"))
         {
-            //NET_UpdatePosition();
+            NET_UpdatePosition();
         }
     }
 

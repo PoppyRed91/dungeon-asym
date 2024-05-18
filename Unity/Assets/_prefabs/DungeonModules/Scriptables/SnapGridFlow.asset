@@ -240,14 +240,14 @@ MonoBehaviour:
   bounds:
     serializedVersion: 2
     x: -465.77502
-    y: -2.568344
+    y: -5.568344
     width: 109.76
     height: 46.53
   canBeDeleted: 1
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 169
+  zIndex: 185
   inputPins:
   - {fileID: -5097358338632926505}
   outputPins:
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: 
   minPathSize: 3
-  maxPathSize: 5
+  maxPathSize: 10
   pathName: alt
   nodeColor: {r: 1, g: 0.5, b: 0, a: 1}
   startFromPath: main
@@ -321,7 +321,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   description: 
-  resolution: {x: 16, y: 2, z: 16}
+  resolution: {x: 8, y: 1, z: 8}
 --- !u!114 &-4850565093409365677
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -367,14 +367,14 @@ MonoBehaviour:
   bounds:
     serializedVersion: 2
     x: -263.77502
-    y: 2.431656
+    y: 1.4316559
     width: 147.19
     height: 46.53
   canBeDeleted: 1
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 168
+  zIndex: 187
   inputPins:
   - {fileID: -8820119012915973014}
   outputPins:
@@ -395,7 +395,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: 
   minPathSize: 3
-  maxPathSize: 5
+  maxPathSize: 10
   pathName: branch
   nodeColor: {r: 0.87790585, g: 0.32226774, b: 0.9622642, a: 1}
   startFromPath: alt
@@ -451,7 +451,7 @@ MonoBehaviour:
   caption: 
   bounds:
     serializedVersion: 2
-    x: 82.224976
+    x: 68.224976
     y: -0.5683441
     width: 111.8
     height: 46.53
@@ -459,7 +459,7 @@ MonoBehaviour:
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 140
+  zIndex: 183
   inputPins:
   - {fileID: -6865797133187580759}
   outputPins:
@@ -490,7 +490,7 @@ MonoBehaviour:
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 161
+  zIndex: 182
   inputPins:
   - {fileID: -5661772121701622559}
   outputPins:
@@ -525,7 +525,7 @@ MonoBehaviour:
   indexCounter:
     index: 17
   topZIndex:
-    index: 169
+    index: 188
   nodes:
   - {fileID: 1581473064959930146}
   - {fileID: -5616618047526137564}
@@ -590,7 +590,7 @@ MonoBehaviour:
   canBeSelected: 1
   canBeMoved: 1
   selected: 1
-  zIndex: 164
+  zIndex: 188
   inputPins:
   - {fileID: 1286942322769455149}
   outputPins:
@@ -665,7 +665,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   description: 
   minPathSize: 3
-  maxPathSize: 5
+  maxPathSize: 10
   pathName: alt
   nodeColor: {r: 1, g: 0.5, b: 0, a: 1}
   startFromPath: main
@@ -879,7 +879,7 @@ MonoBehaviour:
   canBeSelected: 1
   canBeMoved: 1
   selected: 0
-  zIndex: 153
+  zIndex: 184
   inputPins:
   - {fileID: -1151572038103777149}
   outputPins:
@@ -923,7 +923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   description: 
-  pathSize: 30
+  pathSize: 10
   pathName: main
   nodeColor: {r: 0, g: 1, b: 0, a: 1}
   startMarkerName: SpawnPoint

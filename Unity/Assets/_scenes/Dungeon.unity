@@ -206,6 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Dungeon: {fileID: 133030217}
+  DungeonCode: 
 --- !u!1001 &1317173295
 PrefabInstance:
   m_ObjectHideFlags: 0

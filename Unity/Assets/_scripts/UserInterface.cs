@@ -6,12 +6,11 @@ using UnityEngine.UI;
 public class UserInterface : MonoBehaviour
 {
     public static UserInterface Instance;
-    private RawImage _fader;
+    [SerializeField] private RawImage _fader;
 
     private void Awake()
     {
         if (Instance == null) Instance = this;
-        _fader = GetComponentInChildren<RawImage>();
     }
     public void Fade(bool fadeIn)
     {

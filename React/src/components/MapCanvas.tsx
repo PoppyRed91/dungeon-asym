@@ -1,3 +1,9 @@
+import { useRef, useEffect, useState } from "react";
+import defaultImage from "../assets/Default.png";
+import corridorImage from "../assets/Corridor.png";
+import corridor90Image from "../assets/Corridor90.png";
+import { socket } from "../socket";
+
 class Door {
   location: string;
   isOneWay: boolean;
@@ -30,11 +36,12 @@ class Module {
   }
 }
 
-export default function MapGrid() {
-  const dataFromServerForGrid: string =
-    "Start#14#10#180#Door_N-|Default#14#9#180#Door_E-|Corridor#12#8#0#Door_W-|Default#12#9#180#Door_E-|Default#10#8#0#Door_S-Door_N-|Corridor#11#7#270#Door_W-|Default#11#6#270#Door_W-|Default#11#6#180#Door_E-Door_W-|Default#10#6#180#Door_N-|Exit#9#4#0#|Corridor#11#5#0#Door_E-|Default#12#6#90#Door_E-|Default#12#5#90#Door_S-|Corridor#12#5#180#Door_E-|Default#10#4#0#Door_N_OW-|Default#11#10#180#Door_E-|Corridor#9#9#0#Door_W-|Default#9#9#270#Door_W-|Default#8#8#0#Door_E-|Default#9#9#90#Door_E-Door_N_OW-|Corridor#9#8#90#Door_E-|Default#9#6#0#Door_W-|Default#8#6#0#Door_S-|Default#8#6#90#Door_N_OW-|Player#14#10#180#|";
-
-  function getModules(dataToProcess: string): Module[] {
+export default function MapCanvas() {
+  socket.on("map", (data) => {
+    getModules(data);
+  });
+  const [modules, setModules] = useState<Module[]>([]);
+  function getModules(dataToProcess: string) {
     // separating string/array into modules
     const dirtyModules: string[] = dataToProcess.split("|");
 
@@ -48,7 +55,7 @@ export default function MapGrid() {
     });
 
     // creating modules array that will be later used as components
-    const modules = cleanModules.map((module) => {
+    const myModules = cleanModules.map((module) => {
       const splits = module.split("#");
       const textDoors = splits[4].split("-");
       textDoors.pop();
@@ -67,11 +74,50 @@ export default function MapGrid() {
       );
     });
 
-    return modules;
+    setModules(myModules);
   }
 
-  const myModules = getModules(dataFromServerForGrid);
-  console.log(myModules);
+  const canvasRef = useRef(null);
 
-  return <></>;
+  const grid_X = 8;
+  const grid_Y = 8;
+  const tileSize = 8;
+
+  useEffect(() => {
+    console.log("canvas effect");
+    if (canvasRef.current) {
+      const canvas: HTMLCanvasElement = canvasRef.current;
+      canvas.width = grid_X * tileSize;
+      canvas.height = grid_Y * tileSize;
+      const context = canvas.getContext("2d");
+      if (context) {
+        context.fillStyle = "red";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+      }
+      for (const module of modules) {
+        const image = new Image();
+        if (module.typeOfModule === "Corridor") {
+          if (module.rotation !== 0 || 180) {
+            image.src = corridor90Image;
+          } else {
+            image.src = corridorImage;
+          }
+        } else {
+          image.src = defaultImage;
+        }
+        image.onload = () =>
+          context?.drawImage(
+            image,
+            module.xCoordinate * tileSize,
+            module.yCoordinate * tileSize
+          );
+      }
+    }
+  }, [modules]);
+
+  return (
+    <>
+      <canvas ref={canvasRef} className="canvas-map"></canvas>
+    </>
+  );
 }

@@ -59,7 +59,7 @@ public class DungeonManager : MonoBehaviour
                             door += connector.gameObject.name + "_LK-";
                     }
                 }
-                DungeonCode += $"{module.name}#{((identifier.position.x + 3.5f) / 7)}#{((identifier.position.z - 3.5f) / 7)}#{Math.Round(module.eulerAngles.y)}#{door}|";
+                DungeonCode += $"{module.name}#{((identifier.position.x))}#{((identifier.position.z))}#{Math.Round(module.eulerAngles.y)}#{door}|";
             }
             DungeonCode = DungeonCode.Replace("(Clone)", "");
             DungeonCode = DungeonCode.Replace("Room-", "");

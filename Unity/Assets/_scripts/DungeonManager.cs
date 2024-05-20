@@ -41,7 +41,7 @@ public class DungeonManager : MonoBehaviour
             {
                 if (module.name == "Player(Clone)") return;
                 var identifier = module.GetComponentInChildren<RoomIdentifier>().transform;
-                string door = "";
+                string door = String.Empty;
                 foreach (Transform connector in module)
                 {
                     if (connector.GetComponent<SnapConnection>() != null)
@@ -58,12 +58,12 @@ public class DungeonManager : MonoBehaviour
                             door += connector.gameObject.name + "_LK-";
                     }
                 }
-                DungeonCode += $"{module.name}#{identifier.position.x / 4}#{identifier.position.z / 4}#{Math.Round(module.eulerAngles.y)}#{door}|";
+                DungeonCode += $"{module.name}#{identifier.position.x}#{identifier.position.z}#{Math.Round(module.eulerAngles.y)}#{door}|";
+                DungeonCode = DungeonCode.Replace("(Clone)", "");
+                DungeonCode = DungeonCode.Replace("Room-", "");
             }
-            DungeonCode = DungeonCode.Replace("(Clone)", "");
-            DungeonCode = DungeonCode.Replace("Room-", "");
-            Debug.Log(DungeonCode);
         }
+
     }
 }
 

@@ -2,6 +2,10 @@ import { useRef, useEffect, useState } from "react";
 import defaultImage from "../assets/Default.png";
 import corridorImage from "../assets/Corridor.png";
 import corridor90Image from "../assets/Corridor90.png";
+import doorN from "../assets/DoorN.png";
+import doorE from "../assets/DoorE.png";
+import doorS from "../assets/DoorS.png";
+import doorW from "../assets/DoorW.png";
 import { socket } from "../socket";
 
 class Door {
@@ -90,6 +94,7 @@ export default function MapCanvas() {
       canvas.width = grid_X * tileSize;
       canvas.height = grid_Y * tileSize;
       const context = canvas.getContext("2d");
+      context?.setTransform(1, 0, 0, -1, 0, canvas.height);
       if (context) {
         context.fillStyle = "red";
         context.fillRect(0, 0, canvas.width, canvas.height);
@@ -97,20 +102,74 @@ export default function MapCanvas() {
       for (const module of modules) {
         const image = new Image();
         if (module.typeOfModule === "Corridor") {
-          if (module.rotation !== 0 || 180) {
-            image.src = corridor90Image;
-          } else {
+          if (module.rotation === 0 || module.rotation === 180){
             image.src = corridorImage;
+          } else {
+            image.src = corridor90Image;
           }
-        } else {
+        } 
+        else {
           image.src = defaultImage;
         }
         image.onload = () =>
           context?.drawImage(
             image,
-            module.xCoordinate * tileSize,
-            module.yCoordinate * tileSize
+            module.xCoordinate,
+            module.yCoordinate
           );
+        for (const door of module.doors) {
+          const image = new Image();
+          switch (door.location) {
+            case "N":
+              image.src = doorN;
+              image.onload =  () => {
+                context?.drawImage(image, module.xCoordinate, module.yCoordinate);
+              }
+              break;
+            case "E":
+              image.src = doorE;
+              image.onload =  () => {
+                context?.drawImage(image, module.xCoordinate, module.yCoordinate);
+              }
+              break;
+            case "S":
+              image.src = doorS;
+              image.onload =  () => {
+                context?.drawImage(image, module.xCoordinate, module.yCoordinate);
+              }
+              break;
+            case "W":
+              image.src = doorW;
+              image.onload =  () => {
+                context?.drawImage(image, module.xCoordinate, module.yCoordinate);
+              }
+              break;
+              case "N_OW":
+                image.src = doorN;
+                image.onload =  () => {
+                  context?.drawImage(image, module.xCoordinate, module.yCoordinate);
+                }
+                break;
+              case "E_OW":
+                image.src = doorE;
+                image.onload =  () => {
+                  context?.drawImage(image, module.xCoordinate, module.yCoordinate);
+                }
+                break;
+              case "S_OW":
+                image.src = doorS;
+                image.onload =  () => {
+                  context?.drawImage(image, module.xCoordinate, module.yCoordinate);
+                }
+                break;
+              case "W_OW":
+                image.src = doorW;
+                image.onload =  () => {
+                  context?.drawImage(image, module.xCoordinate, module.yCoordinate);
+                }
+                break;
+          }
+        }
       }
     }
   }, [modules]);

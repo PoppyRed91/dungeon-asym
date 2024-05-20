@@ -1,5 +1,5 @@
 using System;
-
+using System.Collections;
 using DungeonArchitect;
 
 using DungeonArchitect.Frameworks.Snap;
@@ -36,7 +36,6 @@ public class DungeonManager : MonoBehaviour
             if (Dungeon.IsLayoutBuilt) Dungeon.DestroyDungeon();
             Dungeon.Config.Seed = (uint)(UnityEngine.Random.value * int.MaxValue);
             Dungeon.Build();
-            Debug.Log(Dungeon.GetComponent<PooledDungeonSceneProvider>().itemParent.transform.childCount);
             var modules = Dungeon.GetComponent<PooledDungeonSceneProvider>().itemParent.transform;
             foreach (Transform module in modules)
             {
@@ -59,7 +58,7 @@ public class DungeonManager : MonoBehaviour
                             door += connector.gameObject.name + "_LK-";
                     }
                 }
-                DungeonCode += $"{module.name}#{((identifier.position.x))}#{((identifier.position.z))}#{Math.Round(module.eulerAngles.y)}#{door}|";
+                DungeonCode += $"{module.name}#{identifier.position.x / 4}#{identifier.position.z / 4}#{Math.Round(module.eulerAngles.y)}#{door}|";
             }
             DungeonCode = DungeonCode.Replace("(Clone)", "");
             DungeonCode = DungeonCode.Replace("Room-", "");

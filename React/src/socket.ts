@@ -15,7 +15,7 @@ export function disconnect() {
 
 socket.on("connect", () => {
   console.log("Connected to server big success");
-  socket.emit("userdata", "zanovijetalo");
+  socket.emit("userdata", "petra");
 });
 
 socket.on("msg", (data) => {
